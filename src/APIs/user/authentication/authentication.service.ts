@@ -157,6 +157,9 @@ export const loginService = async (payload: ILoginRequest) => {
     }
     await tokenRepository.createToken(token)
 
+    //delete (user as any).password
+    //const { password, ...safeUser } = user.toObject()
+
     return {
         success: true,
         user: user,

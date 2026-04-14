@@ -13305,3 +13305,200 @@
         }
     }
 }
+{
+    "level": "INFO",
+    "timestamp": "2026-04-14T08:54:36.266Z",
+    "message": "Database connection established",
+    "meta": {
+        "CONNECTION_NAME": "test"
+    }
+}
+{
+    "level": "INFO",
+    "timestamp": "2026-04-14T08:54:36.269Z",
+    "message": "Rate limiter initiated",
+    "meta": {}
+}
+{
+    "level": "INFO",
+    "timestamp": "2026-04-14T08:54:36.270Z",
+    "message": "Application started on port 3000",
+    "meta": {
+        "SERVER_URL": "http://localhost:3000"
+    }
+}
+{
+    "level": "INFO",
+    "timestamp": "2026-04-14T08:54:56.008Z",
+    "message": "Controller Response",
+    "meta": {
+        "success": true,
+        "statusCode": 200,
+        "request": {
+            "ip": "::1",
+            "method": "GET",
+            "url": "/v1/health"
+        },
+        "message": "Operation is completed",
+        "data": {
+            "application": {
+                "environment": "development",
+                "uptime": "38.03 Second",
+                "memoryUsage": {
+                    "heapTotal": "192.40 MB",
+                    "heapUsed": "187.99 MB"
+                }
+            },
+            "system": {
+                "cpuUsage": [
+                    0,
+                    0,
+                    0
+                ],
+                "totalMemory": "32690.95 MB",
+                "freeMemory": "16534.57 MB"
+            },
+            "timeStamp": 1776156896008
+        }
+    }
+}
+{
+    "level": "ERROR",
+    "timestamp": "2026-04-14T08:54:56.293Z",
+    "message": "Controller Response",
+    "meta": {
+        "success": false,
+        "statusCode": 404,
+        "request": {
+            "ip": "::1",
+            "method": "GET",
+            "url": "/favicon.ico"
+        },
+        "message": "Route is not found",
+        "data": null,
+        "trace": {
+            "error": "Error: Route is not found\n    at exports.default (G:\\@Work\\WD Practice\\Base_Server_Copy\\src\\handlers\\notFound.ts:7:15)\n    at Layer.handle [as handle_request] (G:\\@Work\\WD Practice\\Base_Server_Copy\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at trim_prefix (G:\\@Work\\WD Practice\\Base_Server_Copy\\node_modules\\express\\lib\\router\\index.js:328:13)\n    at G:\\@Work\\WD Practice\\Base_Server_Copy\\node_modules\\express\\lib\\router\\index.js:286:9\n    at router.process_params (G:\\@Work\\WD Practice\\Base_Server_Copy\\node_modules\\express\\lib\\router\\index.js:346:12)\n    at next (G:\\@Work\\WD Practice\\Base_Server_Copy\\node_modules\\express\\lib\\router\\index.js:280:10)\n    at SendStream.error (G:\\@Work\\WD Practice\\Base_Server_Copy\\node_modules\\serve-static\\index.js:121:7)\n    at SendStream.emit (node:events:508:28)\n    at SendStream.emit (node:domain:489:12)\n    at SendStream.error (G:\\@Work\\WD Practice\\Base_Server_Copy\\node_modules\\send\\index.js:270:17)"
+        }
+    }
+}
+{
+    "level": "INFO",
+    "timestamp": "2026-04-14T08:57:46.373Z",
+    "message": "Controller Response",
+    "meta": {
+        "success": true,
+        "statusCode": 200,
+        "request": {
+            "ip": "::1",
+            "method": "GET",
+            "url": "/v1/self"
+        },
+        "message": "Operation is completed",
+        "data": null
+    }
+}
+{
+    "level": "ERROR",
+    "timestamp": "2026-04-14T09:02:07.251Z",
+    "message": "Controller Response",
+    "meta": {
+        "success": false,
+        "statusCode": 500,
+        "request": {
+            "ip": "::1",
+            "method": "POST",
+            "url": "/v1/login"
+        },
+        "message": "secretOrPrivateKey must have a value",
+        "data": null,
+        "trace": {
+            "error": "Error: secretOrPrivateKey must have a value\n    at Object.module.exports [as sign] (G:\\@Work\\WD Practice\\Base_Server_Copy\\node_modules\\jsonwebtoken\\sign.js:111:20)\n    at Object.generateToken (G:\\@Work\\WD Practice\\Base_Server_Copy\\src\\utils\\jwt.ts:5:20)\n    at G:\\@Work\\WD Practice\\Base_Server_Copy\\src\\APIs\\user\\authentication\\authentication.service.ts:147:29\n    at Generator.next (<anonymous>)\n    at fulfilled (G:\\@Work\\WD Practice\\Base_Server_Copy\\src\\APIs\\user\\authentication\\authentication.service.ts:5:58)"
+        }
+    }
+}
+{
+    "level": "INFO",
+    "timestamp": "2026-04-14T09:04:08.484Z",
+    "message": "Database connection established",
+    "meta": {
+        "CONNECTION_NAME": "test"
+    }
+}
+{
+    "level": "INFO",
+    "timestamp": "2026-04-14T09:04:08.487Z",
+    "message": "Rate limiter initiated",
+    "meta": {}
+}
+{
+    "level": "INFO",
+    "timestamp": "2026-04-14T09:04:08.487Z",
+    "message": "Application started on port 3000",
+    "meta": {
+        "SERVER_URL": "http://localhost:3000"
+    }
+}
+{
+    "level": "INFO",
+    "timestamp": "2026-04-14T09:04:42.449Z",
+    "message": "Controller Response",
+    "meta": {
+        "success": true,
+        "statusCode": 200,
+        "request": {
+            "ip": "::1",
+            "method": "POST",
+            "url": "/v1/login"
+        },
+        "message": "Login successful",
+        "data": {
+            "success": true,
+            "user": {
+                "_id": "69dcf2acef10849c861cba04",
+                "password": "$2b$10$sZWZNEyoATveZGRGliT/Tufrxi4WhDi7kdiX1M7y3Li2l2.0JPy.y",
+                "lastLoginAt": "2026-04-14T09:04:42.092Z",
+                "updatedAt": "2026-04-14T09:04:42.096Z"
+            },
+            "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OWRjZjJhY2VmMTA4NDljODYxY2JhMDQiLCJpYXQiOjE3NzYxNTc0ODIsImV4cCI6MTc3NjE2MTA4Mn0.Twf0JFvpwQoQ2I0HTyJn1zwswuBK3JcXHBSjlLAAqPg",
+            "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OWRjZjJhY2VmMTA4NDljODYxY2JhMDQiLCJpYXQiOjE3NzYxNTc0ODIsImV4cCI6MTgwNzY5MzQ4Mn0.QPqisWmDcUVjs3pp_xXcOz_hROAjiVsYqCytjHyjt9Q"
+        }
+    }
+}
+{
+    "level": "INFO",
+    "timestamp": "2026-04-14T09:11:27.133Z",
+    "message": "Controller Response",
+    "meta": {
+        "success": true,
+        "statusCode": 200,
+        "request": {
+            "ip": "::1",
+            "method": "PUT",
+            "url": "/v1/logout"
+        },
+        "message": "Operation is completed",
+        "data": null
+    }
+}
+{
+    "level": "INFO",
+    "timestamp": "2026-04-14T09:22:31.451Z",
+    "message": "Database connection established",
+    "meta": {
+        "CONNECTION_NAME": "test"
+    }
+}
+{
+    "level": "INFO",
+    "timestamp": "2026-04-14T09:22:31.455Z",
+    "message": "Rate limiter initiated",
+    "meta": {}
+}
+{
+    "level": "INFO",
+    "timestamp": "2026-04-14T09:22:31.455Z",
+    "message": "Application started on port 3000",
+    "meta": {
+        "SERVER_URL": "http://localhost:3000"
+    }
+}
