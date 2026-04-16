@@ -11,41 +11,40 @@ export default asyncHandler(async (request: Request, _response: Response, next: 
     try {
         const req = request as IAuthenticateRequest
 
-        // Checking cookies for authorizarion accesstoken
-        /* const { cookies } = req
-
-        const { accessToken } = cookies as {
-            accessToken: string | undefined
-        }
-        */
-        
-        // Checking HEADERS for authorizarion accesstoken
         const authHeader = req.headers.authorization
 
-         if (!authHeader || !authHeader.startsWith('Bearer ')) {
-          return httpError(next, new Error(responseMessage.UNAUTHORIZED), request, 401)
-         }
-
-           const accessToken = authHeader.split(' ')[1]
-
-        if (accessToken) {
-            const { userId } = jwt.verifyToken(accessToken, config.TOKENS.ACCESS.SECRET) as IDecryptedJwt
-
-            const user = await query.findUserById(userId)
-            if (user) {
-                req.authenticatedUser = user
-                return next()
-            }
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+            return httpError(next, new Error(responseMessage.UNAUTHORIZED), request, 401)
         }
-        httpError(next, new Error(responseMessage.UNAUTHORIZED), request, 401)
-    } 
 
-      /* catch (error) {
-       return httpError(next, new Error(responseMessage.UNAUTHORIZED), request, 401)
-       }
-      */
-    
-    catch (error) {
-        httpError(next, error, request, 500)
+        const accessToken = authHeader.split(' ')[1]
+
+        const { userId } = jwt.verifyToken(
+            accessToken,
+            config.TOKENS.ACCESS.SECRET
+        ) as IDecryptedJwt
+
+        const user = await query.findUserById(userId)
+
+        if (!user) {
+            return httpError(next, new Error(responseMessage.UNAUTHORIZED), request, 401)
+        }
+
+        req.authenticatedUser = user
+        return next()
+
+    } catch (error: unknown) {
+
+        const err = error as { name?: string }
+
+        if (err.name === 'TokenExpiredError') {
+            return httpError(next, new Error('Token expired'), request, 401)
+        }
+
+        if (err.name === 'JsonWebTokenError') {
+            return httpError(next, new Error('Invalid token'), request, 401)
+        }
+
+        return httpError(next, new Error(responseMessage.UNAUTHORIZED), request, 401)
     }
 })
