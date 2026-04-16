@@ -12,6 +12,8 @@ import health from '../../../utils/health'
 import { EApplicationEnvironment } from '../../../constant/application'
 import config from '../../../config/config'
 import query from '../_shared/repo/token.repository'
+// Importing the refreshTokenService to handle token refreshing
+import { refreshTokenService } from './authentication.service'
 
 export default {
     register: asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
@@ -130,5 +132,30 @@ export default {
         } catch (error) {
             httpError(next, error, request, 500)
         }
-    })
+    }),
+    // This function is used to refresh access token using refresh token
+    refreshToken: asyncHandler(async (request: Request, response: Response, next: NextFunction) => {
+    try {
+        const { refreshToken } = request.body as { refreshToken: string }
+
+        if (!refreshToken) {
+            return httpError(
+                next,
+                new CustomError('Refresh token is required', 400),
+                request,
+                400
+            )
+        }
+
+        const result = await refreshTokenService(refreshToken)
+
+        httpResponse(response, request, 200, 'Token refreshed successfully', result)
+    } catch (error) {
+        if (error instanceof CustomError) {
+            httpError(next, error, request, error.statusCode)
+        } else {
+            httpError(next, error, request, 500)
+        }
+    }
+})
 }

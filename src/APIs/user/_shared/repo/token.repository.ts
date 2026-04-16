@@ -7,5 +7,9 @@ export default {
     },
     deleteToken: (token: string) => {
         return tokenModel.deleteOne({ token: token })
-    }
+    },
+    //NEW FIND TOKEN METHOD
+    findToken: (token: string) => {
+    return tokenModel.findOne({ token })
+}
 }

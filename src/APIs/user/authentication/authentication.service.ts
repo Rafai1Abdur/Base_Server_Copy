@@ -16,7 +16,12 @@ import utc from 'dayjs/plugin/utc'
 import jwt from '../../../utils/jwt'
 import config from '../../../config/config'
 import { IToken } from '../_shared/types/token.interface'
+
+// Importing the refreshTokenService to handle token refreshing
 import tokenRepository from '../_shared/repo/token.repository'
+
+import { IDecryptedJwt } from '../../../types/types'
+// Importing the refreshTokenService to handle token refreshing 
 
 dayjs.extend(utc)
 
@@ -165,5 +170,34 @@ export const loginService = async (payload: ILoginRequest) => {
         user: user,
         accessToken: accessToken,
         refreshToken: refreshToken
+    }
+}
+
+// NEW FUNCTION ADDED FOR REFRESHING TOKEN
+export const refreshTokenService = async (refreshToken: string) => {
+
+    // 1. Verify token signature
+    const decoded = jwt.verifyToken(
+        refreshToken,
+        config.TOKENS.REFRESH.SECRET
+    ) as IDecryptedJwt
+
+    // 2. Check if token exists in DB
+    const tokenExists = await tokenRepository.findToken(refreshToken)
+
+    if (!tokenExists) {
+        throw new CustomError(responseMessage.UNAUTHORIZED, 401)
+    }
+
+    // 3. Generate new access token
+    const accessToken = jwt.generateToken(
+        { userId: decoded.userId },
+        config.TOKENS.ACCESS.SECRET,
+        config.TOKENS.ACCESS.EXPIRY
+    )
+
+    return {
+        success: true,
+        accessToken
     }
 }
