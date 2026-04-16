@@ -11,11 +11,22 @@ export default asyncHandler(async (request: Request, _response: Response, next: 
     try {
         const req = request as IAuthenticateRequest
 
-        const { cookies } = req
+        // Checking cookies for authorizarion accesstoken
+        /* const { cookies } = req
 
         const { accessToken } = cookies as {
             accessToken: string | undefined
         }
+        */
+        
+        // Checking HEADERS for authorizarion accesstoken
+        const authHeader = req.headers.authorization
+
+         if (!authHeader || !authHeader.startsWith('Bearer ')) {
+          return httpError(next, new Error(responseMessage.UNAUTHORIZED), request, 401)
+         }
+
+           const accessToken = authHeader.split(' ')[1]
 
         if (accessToken) {
             const { userId } = jwt.verifyToken(accessToken, config.TOKENS.ACCESS.SECRET) as IDecryptedJwt
@@ -27,7 +38,14 @@ export default asyncHandler(async (request: Request, _response: Response, next: 
             }
         }
         httpError(next, new Error(responseMessage.UNAUTHORIZED), request, 401)
-    } catch (error) {
+    } 
+
+      /* catch (error) {
+       return httpError(next, new Error(responseMessage.UNAUTHORIZED), request, 401)
+       }
+      */
+    
+    catch (error) {
         httpError(next, error, request, 500)
     }
 })
