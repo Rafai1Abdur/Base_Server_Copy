@@ -22,9 +22,15 @@ app.use(
 app.use(express.json())
 app.use(express.static(path.join(__dirname, '../', 'public')))
 
+// TEST ROUTE HANDLER IMPORT
+import testRouter from './APIs/user/test/test.route'
+
 //Router
 // app.use('/v1', router)
 router(app)
+
+//TEST ROUTE (MUST BE BEFORE 404 HANDLER)
+app.use('/v1/test', testRouter)
 
 //404 handler
 app.use(notFound)

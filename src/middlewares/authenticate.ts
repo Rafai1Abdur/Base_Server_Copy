@@ -5,19 +5,29 @@ import config from '../config/config'
 import query from '../APIs/user/_shared/repo/user.repository'
 import httpError from '../handlers/errorHandler/httpError'
 import responseMessage from '../constant/responseMessage'
-import asyncHandler from '../handlers/async'
 
-export default asyncHandler(async (request: Request, _response: Response, next: NextFunction) => {
+export default async function authenticate(
+    request: Request,
+    _response: Response,
+    next: NextFunction
+) {
+    const req = request as IAuthenticateRequest
+
+    // TEST LOGGING TO VERIFY IF MIDDLEWARE IS EXECUTED
+    // console.log("🔥 AUTH MIDDLEWARE EXECUTED", req.url)
+
     try {
-        const req = request as IAuthenticateRequest
-
         const authHeader = req.headers.authorization
 
-        if (!authHeader || !authHeader.startsWith('Bearer ')) {
-            return httpError(next, new Error(responseMessage.UNAUTHORIZED), request, 401)
+        let accessToken: string | undefined
+
+        if (authHeader?.startsWith('Bearer ')) {
+            accessToken = authHeader.split(' ')[1]
         }
 
-        const accessToken = authHeader.split(' ')[1]
+        if (!accessToken) {
+            return httpError(next, new Error(responseMessage.UNAUTHORIZED), request, 401)
+        }
 
         const { userId } = jwt.verifyToken(
             accessToken,
@@ -33,18 +43,7 @@ export default asyncHandler(async (request: Request, _response: Response, next: 
         req.authenticatedUser = user
         return next()
 
-    } catch (error: unknown) {
-
-        const err = error as { name?: string }
-
-        if (err.name === 'TokenExpiredError') {
-            return httpError(next, new Error('Token expired'), request, 401)
-        }
-
-        if (err.name === 'JsonWebTokenError') {
-            return httpError(next, new Error('Invalid token'), request, 401)
-        }
-
-        return httpError(next, new Error(responseMessage.UNAUTHORIZED), request, 401)
+    } catch {
+        return httpError(next, new Error('Invalid or expired token'), request, 401)
     }
-})
+}
