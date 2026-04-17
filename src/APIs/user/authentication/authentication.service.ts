@@ -158,7 +158,9 @@ export const loginService = async (payload: ILoginRequest) => {
 
     //Storing refresh token into db
     const token: IToken = {
-        token: refreshToken
+    token: refreshToken,
+    // Adding userId to the token object for better tracking and management
+    userId: user._id.toString()
     }
     await tokenRepository.createToken(token)
 
@@ -173,6 +175,7 @@ export const loginService = async (payload: ILoginRequest) => {
     }
 }
 
+/* 
 // NEW FUNCTION ADDED FOR REFRESHING TOKEN
 export const refreshTokenService = async (refreshToken: string) => {
 
@@ -199,5 +202,48 @@ export const refreshTokenService = async (refreshToken: string) => {
     return {
         success: true,
         accessToken
+    }
+}   */
+
+    // NEW FUNCTION ADDED FOR REFRESHING TOKEN WITH ROTATION (DELETING OLD REFRESH TOKEN AND CREATING NEW ONE)
+    export const refreshTokenService = async (refreshToken: string) => {
+    // 1. Verify token
+    const decoded = jwt.verifyToken(
+        refreshToken,
+        config.TOKENS.REFRESH.SECRET
+    ) as IDecryptedJwt
+
+    // 2. Check if token exists in DB
+    const existingToken = await tokenRepository.findToken(refreshToken)
+
+    if (!existingToken) {
+        throw new CustomError('Invalid refresh token', 401)
+    }
+
+    // 3. DELETE old refresh token (rotation 🔥)
+    await tokenRepository.deleteToken(refreshToken)
+
+    // 4. Generate NEW tokens
+    const newAccessToken = jwt.generateToken(
+        { userId: decoded.userId },
+        config.TOKENS.ACCESS.SECRET,
+        config.TOKENS.ACCESS.EXPIRY
+    )
+
+    const newRefreshToken = jwt.generateToken(
+        { userId: decoded.userId },
+        config.TOKENS.REFRESH.SECRET,
+        config.TOKENS.REFRESH.EXPIRY
+    )
+
+    // 5. Store new refresh token in DB
+    await tokenRepository.createToken({
+        token: newRefreshToken,
+        userId: decoded.userId
+    })
+
+    return {
+        accessToken: newAccessToken,
+        refreshToken: newRefreshToken
     }
 }

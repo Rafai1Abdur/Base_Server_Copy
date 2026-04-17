@@ -6,7 +6,12 @@ const tokenSchema = new mongoose.Schema<IToken>(
         token: {
             type: String,
             required: true
-        }
+        },
+        // Adding userId field to associate the token with a specific user
+        userId: {
+            type: String,
+            required: true
+    }
     },
     { timestamps: true }
 )
