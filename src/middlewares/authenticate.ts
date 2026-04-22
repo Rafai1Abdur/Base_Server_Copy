@@ -21,8 +21,14 @@ export default async function authenticate(
 
         let accessToken: string | undefined
 
+        // 1. Try header first
         if (authHeader?.startsWith('Bearer ')) {
             accessToken = authHeader.split(' ')[1]
+        }        
+
+        // 2. If not found, try cookies
+        if (!accessToken && req.cookies?.accessToken) {
+            accessToken = req.cookies.accessToken as string
         }
 
         if (!accessToken) {
